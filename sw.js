@@ -1,8 +1,9 @@
-const CACHE_NAME = "motoflash-reloj-v1";
+const CACHE_NAME = "motoflash-reloj-v2";
 const ASSETS = [
-  "/",
-  "/manifest.json",
-  "/static/logo.jpg"
+  "./",
+  "./index.html",
+  "./manifest.json",
+  "./logo.jpg"
 ];
 
 self.addEventListener("install", (event) => {
