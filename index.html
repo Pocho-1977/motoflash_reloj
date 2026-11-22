@@ -47,35 +47,37 @@
     }
 
     .app {
+      position: relative;
+      z-index: 1;
       width: 100%;
       height: 100%;
       max-width: 480px;
       margin: 0 auto;
-      padding: 18px 16px 20px;
+      padding: 14px 16px 14px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
-      gap: 14px;
+      gap: 10px;
     }
 
     .digital-box {
       width: 100%;
-      background: var(--bg-card);
+      background: rgba(11, 16, 29, 0.92);
       border: 2px solid var(--cyan);
       border-radius: 22px;
-      padding: 14px 18px;
+      padding: 12px 16px;
       text-align: center;
       box-shadow: var(--glow-cyan);
     }
 
     .app.solo-digital .digital-box {
       margin: auto 0;
-      padding: 28px 20px;
+      padding: 26px 20px;
     }
 
     .app.solo-digital .digital-time {
-      font-size: clamp(3.6rem, 15vw, 5.2rem);
+      font-size: clamp(3.5rem, 15vw, 5rem);
     }
 
     .app.solo-digital .analog-wrap {
@@ -87,7 +89,7 @@
     }
 
     .app.solo-analog .analog-wrap {
-      width: min(88vw, 370px);
+      width: min(84vw, 350px);
       margin: auto 0;
     }
 
@@ -100,7 +102,7 @@
     }
 
     .digital-time {
-      font-size: clamp(2.8rem, 11vw, 3.8rem);
+      font-size: clamp(2.6rem, 10.5vw, 3.6rem);
       font-weight: 800;
       color: var(--yellow);
       letter-spacing: 2px;
@@ -108,15 +110,15 @@
     }
 
     .digital-ampm {
-      font-size: clamp(1rem, 4vw, 1.35rem);
+      font-size: clamp(0.95rem, 3.8vw, 1.3rem);
       font-weight: 800;
       color: var(--cyan);
       letter-spacing: 1px;
     }
 
     .digital-date {
-      margin-top: 8px;
-      font-size: clamp(0.85rem, 3.4vw, 1.05rem);
+      margin-top: 6px;
+      font-size: clamp(0.8rem, 3.2vw, 1rem);
       font-weight: 700;
       color: #d8e6f3;
       letter-spacing: 0.8px;
@@ -125,9 +127,9 @@
 
     .analog-wrap {
       position: relative;
-      width: min(82vw, 340px);
+      width: min(76vw, 310px);
       aspect-ratio: 1 / 1;
-      background: var(--bg-card);
+      background: rgba(11, 16, 29, 0.92);
       border: 2px solid var(--cyan);
       border-radius: 28px;
       box-shadow: var(--glow-cyan);
@@ -138,12 +140,12 @@
 
     .brand-tag {
       position: absolute;
-      top: 14px;
-      left: 16px;
+      top: 12px;
+      left: 14px;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 800;
       color: #cfe0f5;
       letter-spacing: 0.4px;
@@ -191,14 +193,14 @@
       width: 100%;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      gap: 10px;
     }
 
     .btn {
-      min-height: 54px;
+      min-height: 50px;
       border-radius: 16px;
-      background: var(--bg-card);
-      font-size: clamp(0.95rem, 3.8vw, 1.1rem);
+      background: rgba(11, 16, 29, 0.94);
+      font-size: clamp(0.92rem, 3.6vw, 1.05rem);
       font-weight: 800;
       letter-spacing: 1px;
       text-transform: uppercase;
@@ -222,11 +224,41 @@
       box-shadow: var(--glow-cyan);
     }
 
+    .bottom-logo-bar {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 6px 12px;
+      border-radius: 16px;
+      background: rgba(11, 16, 29, 0.92);
+      border: 1px solid rgba(0, 255, 204, 0.35);
+    }
+
+    .bottom-logo-img {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 1.5px solid var(--yellow);
+      box-shadow: 0 0 10px rgba(255, 204, 0, 0.35);
+      flex-shrink: 0;
+    }
+
+    .bottom-logo-text {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #e4f1ff;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
     .status-note {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       color: var(--text-muted);
       text-align: center;
-      min-height: 14px;
+      min-height: 12px;
     }
   </style>
 </head>
@@ -258,6 +290,11 @@
     <section class="controls">
       <button id="btnCambiar" type="button" class="btn btn-cambiar">CAMBIAR</button>
       <button id="btnPantalla" type="button" class="btn btn-pantalla">PANTALLA</button>
+    </section>
+
+    <section class="bottom-logo-bar" aria-label="Logo Moto Flash">
+      <img src="./logo.jpg" alt="Logo Moto Flash" class="bottom-logo-img" />
+      <span class="bottom-logo-text">Moto Flash • Transporte y Delivery</span>
     </section>
 
     <div id="statusNote" class="status-note">Modo: Dual (Digital + Análogo)</div>
