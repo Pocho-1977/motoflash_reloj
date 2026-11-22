@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<!-- Derechos reservados © 2026 José Milano -->
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Moto Flash - Reloj</title>
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#060911" />
+  <link rel="apple-touch-icon" href="/static/logo.jpg" />
+  <style>
+    :root {
+      --bg-main: #060911;
+      --bg-card: #0b101d;
+      --cyan: #00ffcc;
+      --yellow: #ffcc00;
+      --red: #ff2a55;
+      --text-main: #ffffff;
+      --text-muted: #9fb3c8;
+      --glow-cyan: 0 0 14px rgba(0, 255, 204, 0.35), inset 0 0 10px rgba(0, 255, 204, 0.15);
+      --glow-yellow: 0 0 14px rgba(255, 204, 0, 0.35), inset 0 0 10px rgba(255, 204, 0, 0.15);
+    }
+
+    body.tema-solar {
+      --cyan: #ffcc00;
+      --yellow: #00ffcc;
+      --glow-cyan: 0 0 14px rgba(255, 204, 0, 0.35), inset 0 0 10px rgba(255, 204, 0, 0.15);
+      --glow-yellow: 0 0 14px rgba(0, 255, 204, 0.35), inset 0 0 10px rgba(0, 255, 204, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: var(--bg-main);
+      color: var(--text-main);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      overflow: hidden;
+    }
+
+    .app {
+      width: 100%;
+      height: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 18px 16px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .digital-box {
+      width: 100%;
+      background: var(--bg-card);
+      border: 2px solid var(--cyan);
+      border-radius: 22px;
+      padding: 14px 18px;
+      text-align: center;
+      box-shadow: var(--glow-cyan);
+    }
+
+    .digital-time-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 8px;
+      line-height: 1;
+    }
+
+    .digital-time {
+      font-size: clamp(2.8rem, 11vw, 3.8rem);
+      font-weight: 800;
+      color: var(--yellow);
+      letter-spacing: 2px;
+      text-shadow: 0 0 14px rgba(255, 204, 0, 0.35);
+    }
+
+    .digital-ampm {
+      font-size: clamp(1rem, 4vw, 1.35rem);
+      font-weight: 800;
+      color: var(--cyan);
+      letter-spacing: 1px;
+    }
+
+    .digital-date {
+      margin-top: 8px;
+      font-size: clamp(0.85rem, 3.4vw, 1.05rem);
+      font-weight: 700;
+      color: #d8e6f3;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    .analog-wrap {
+      position: relative;
+      width: min(82vw, 340px);
+      aspect-ratio: 1 / 1;
+      background: var(--bg-card);
+      border: 2px solid var(--cyan);
+      border-radius: 28px;
+      box-shadow: var(--glow-cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-tag {
+      position: absolute;
+      top: 14px;
+      left: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #cfe0f5;
+      letter-spacing: 0.4px;
+      z-index: 5;
+    }
+
+    .brand-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 8px var(--cyan);
+    }
+
+    .clock-svg {
+      width: 92%;
+      height: 92%;
+      overflow: visible;
+    }
+
+    .hand {
+      transform-origin: 150px 150px;
+      stroke-linecap: round;
+    }
+
+    .hour-hand {
+      stroke: var(--yellow);
+      stroke-width: 7;
+      filter: drop-shadow(0 0 6px rgba(255, 204, 0, 0.6));
+    }
+
+    .minute-hand {
+      stroke: var(--cyan);
+      stroke-width: 5.5;
+      filter: drop-shadow(0 0 6px rgba(0, 255, 204, 0.6));
+    }
+
+    .second-hand {
+      stroke: var(--red);
+      stroke-width: 3;
+      filter: drop-shadow(0 0 5px rgba(255, 42, 85, 0.65));
+    }
+
+    .controls {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .btn {
+      min-height: 54px;
+      border-radius: 16px;
+      background: var(--bg-card);
+      font-size: clamp(0.95rem, 3.8vw, 1.1rem);
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform 0.12s ease, opacity 0.15s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn-cambiar {
+      color: var(--yellow);
+      border: 2px solid var(--yellow);
+      box-shadow: var(--glow-yellow);
+    }
+
+    .btn-pantalla {
+      color: var(--cyan);
+      border: 2px solid var(--cyan);
+      box-shadow: var(--glow-cyan);
+    }
+
+    .status-note {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-align: center;
+      min-height: 14px;
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="digital-box" aria-label="Hora y fecha digital">
+      <div class="digital-time-row">
+        <span id="digitalTime" class="digital-time">12:00</span>
+        <span id="digitalAmPm" class="digital-ampm">AM</span>
+      </div>
+      <div id="digitalDate" class="digital-date">SÁBADO, 21 DE NOVIEMBRE</div>
+    </section>
+
+    <section class="analog-wrap" aria-label="Reloj analógico Moto Flash">
+      <div class="brand-tag">
+        <span class="brand-dot"></span>
+        <span>Moto Flash</span>
+      </div>
+
+      <svg id="clockSvg" class="clock-svg" viewBox="0 0 300 300">
+        <g id="ticksLayer"></g>
+        <line id="hourHand" class="hand hour-hand" x1="150" y1="150" x2="150" y2="88" />
+        <line id="minuteHand" class="hand minute-hand" x1="150" y1="150" x2="150" y2="62" />
+        <line id="secondHand" class="hand second-hand" x1="150" y1="168" x2="150" y2="52" />
+        <circle cx="150" cy="150" r="8" fill="#ffcc00" stroke="#060911" stroke-width="2.5" />
+      </svg>
+    </section>
+
+    <section class="controls">
+      <button id="btnCambiar" type="button" class="btn btn-cambiar">CAMBIAR</button>
+      <button id="btnPantalla" type="button" class="btn btn-pantalla">PANTALLA</button>
+    </section>
+
+    <div id="statusNote" class="status-note"></div>
+  </main>
+
+  <script>
+    const DIAS = [
+      "DOMINGO", "LUNES", "MARTES", "MIÉRCOLES",
+      "JUEVES", "VIERNES", "SÁBADO"
+    ];
+    const MESES = [
+      "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO",
+      "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"
+    ];
+
+    const ticksLayer = document.getElementById("ticksLayer");
+    const digitalTime = document.getElementById("digitalTime");
+    const digitalAmPm = document.getElementById("digitalAmPm");
+    const digitalDate = document.getElementById("digitalDate");
+    const hourHand = document.getElementById("hourHand");
+    const minuteHand = document.getElementById("minuteHand");
+    const secondHand = document.getElementById("secondHand");
+    const btnCambiar = document.getElementById("btnCambiar");
+    const btnPantalla = document.getElementById("btnPantalla");
+    const statusNote = document.getElementById("statusNote");
+
+    let modoMarcadores = 0;
+    let wakeLock = null;
+
+    function dibujarMarcadores() {
+      ticksLayer.innerHTML = "";
+      const cx = 150, cy = 150;
+
+      for (let i = 0; i < 12; i++) {
+        const anguloDeg = i * 30;
+        const anguloRad = (anguloDeg - 90) * (Math.PI / 180);
+        const esPrincipal = i % 3 === 0;
+        const radio = 114;
+        const x = cx + radio * Math.cos(anguloRad);
+        const y = cy + radio * Math.sin(anguloRad);
+
+        if (modoMarcadores === 0) {
+          const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+          const w = esPrincipal ? 16 : 11;
+          const h = esPrincipal ? 7 : 6;
+          rect.setAttribute("x", (x - w / 2).toFixed(2));
+          rect.setAttribute("y", (y - h / 2).toFixed(2));
+          rect.setAttribute("width", w);
+          rect.setAttribute("height", h);
+          rect.setAttribute("rx", h / 2);
+          rect.setAttribute("fill", esPrincipal ? "#ffcc00" : "#00ffcc");
+          rect.setAttribute("transform", `rotate(${anguloDeg} ${x.toFixed(2)} ${y.toFixed(2)})`);
+          ticksLayer.appendChild(rect);
+        } else {
+          const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          circle.setAttribute("cx", x.toFixed(2));
+          circle.setAttribute("cy", y.toFixed(2));
+          circle.setAttribute("r", esPrincipal ? "6.5" : "4.2");
+          circle.setAttribute("fill", esPrincipal ? "#ffcc00" : "#00ffcc");
+          ticksLayer.appendChild(circle);
+        }
+      }
+    }
+
+    function actualizarReloj() {
+      const ahora = new Date();
+      const horas24 = ahora.getHours();
+      const minutos = ahora.getMinutes();
+      const segundos = ahora.getSeconds();
+      const milis = ahora.getMilliseconds();
+
+      const ampm = horas24 >= 12 ? "PM" : "AM";
+      const horas12 = horas24 % 12 || 12;
+
+      digitalTime.textContent =
+        `${String(horas12).padStart(2, "0")}:${String(minutos).padStart(2, "0")}`;
+      digitalAmPm.textContent = ampm;
+      digitalDate.textContent =
+        `${DIAS[ahora.getDay()]}, ${ahora.getDate()} DE ${MESES[ahora.getMonth()]}`;
+
+      const segSuave = segundos + milis / 1000;
+      const minSuave = minutos + segSuave / 60;
+      const horaSuave = (horas24 % 12) + minSuave / 60;
+
+      hourHand.style.transform = `rotate(${horaSuave * 30}deg)`;
+      minuteHand.style.transform = `rotate(${minSuave * 6}deg)`;
+      secondHand.style.transform = `rotate(${segSuave * 6}deg)`;
+
+      requestAnimationFrame(actualizarReloj);
+    }
+
+    async function activarWakeLock() {
+      try {
+        if ("wakeLock" in navigator) {
+          wakeLock = await navigator.wakeLock.request("screen");
+          statusNote.textContent = "Pantalla activa mientras esté visible";
+        }
+      } catch (_) {
+        statusNote.textContent = "";
+      }
+    }
+
+    btnCambiar.addEventListener("click", () => {
+      document.body.classList.toggle("tema-solar");
+      modoMarcadores = (modoMarcadores + 1) % 2;
+      dibujarMarcadores();
+    });
+
+    btnPantalla.addEventListener("click", async () => {
+      try {
+        if (!document.fullscreenElement) {
+          await document.documentElement.requestFullscreen();
+          await activarWakeLock();
+        } else {
+          await document.exitFullscreen();
+        }
+      } catch (_) {
+        statusNote.textContent = "Usa el menú del navegador para pantalla completa";
+      }
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible" && wakeLock !== null) {
+        activarWakeLock();
+      }
+    });
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/sw.js").catch(() => {});
+      });
+    }
+
+    dibujarMarcadores();
+    requestAnimationFrame(actualizarReloj);
+  </script>
+</body>
+</html>
